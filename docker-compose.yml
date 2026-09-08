@@ -17,7 +17,6 @@ networks:
   mailoney_local:
   medpot_local:
   miniprint_local:
-  rdphoneypot_local:
   redishoneypot_local:
   sentrypeer_local:
   tanner_local:
@@ -314,10 +313,16 @@ services:
      - h0neytr4p_local
     ports:
      - "443:443"
-     - "2087:443"
+     - "2082:2082"
+     - "2083:2083"
+     - "2086:2086"
+     - "2087:2087"
+     - "2095:2095"
+     - "2096:2096"
     # - "80:80"
+    build: ./docker/h0neytr4p
     image: ${TPOT_REPO}/h0neytr4p:${TPOT_VERSION}
-    pull_policy: ${TPOT_PULL_POLICY}
+    pull_policy: never
     read_only: true
     volumes:
       - ${TPOT_DATA_PATH}/h0neytr4p/log/:/opt/h0neytr4p/log/
@@ -347,7 +352,7 @@ services:
      - "993:993"
      - "995:995"
     # - "3306:3306"
-    # - "3389:3389"
+     - "3389:3389"
      - "1080:1080"
      - "5432:5432"
      - "5900:5900"
@@ -465,24 +470,6 @@ services:
     volumes:
      - ${TPOT_DATA_PATH}/miniprint/log/:/opt/miniprint/log/
      - ${TPOT_DATA_PATH}/miniprint/uploads/:/opt/miniprint/uploads/
-
-# RDPHoneypot service
-  rdphoneypot:
-    container_name: rdphoneypot
-    restart: always
-    depends_on:
-      tpotinit:
-        condition: service_healthy
-    networks:
-     - rdphoneypot_local
-    ports:
-     - "3389:3389"
-    image: ${TPOT_REPO}/rdphoneypot:${TPOT_VERSION}
-    pull_policy: ${TPOT_PULL_POLICY}
-    read_only: true
-    volumes:
-     - ${TPOT_DATA_PATH}/rdphoneypot/cert:/opt/rdphoneypot/cert
-     - ${TPOT_DATA_PATH}/rdphoneypot/log:/opt/rdphoneypot/log
 
 # Redishoneypot service
   redishoneypot:
