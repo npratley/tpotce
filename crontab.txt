@@ -1,0 +1,17 @@
+# HIVE crontab (ubuntu user)
+# Captured from production HIVE (ip-172-31-13-192) — 2026-09-09
+#
+# To inspect live crontab:  crontab -l
+# To restore from this file: crontab < crontab.txt
+
+# Rotate Elasticsearch indices: delete logstash-* indices older than 7 days.
+# Keeps disk usage bounded. Pairs with es-cleanup.sh in this repo.
+0 2 * * * /home/ubuntu/tpotce/es-cleanup.sh >> /home/ubuntu/tpotce/es-cleanup.log 2>&1
+
+# Refresh Echelon landing page stats in ClickHouse.
+# Runs hourly at :05. Script: apps/sensor-ts/src/tools/refresh-landing-stats.ts
+5 * * * * cd /home/ubuntu/echelon/apps/sensor-ts && /usr/bin/npx tsx src/tools/refresh-landing-stats.ts >> /home/ubuntu/echelon-landing-stats.log 2>&1
+
+# Daily activity aggregation — currently disabled.
+# Uncomment to re-enable. Script: apps/sensor-ts/src/tools/daily-aggregate.ts
+# 0 2 * * * cd /home/ubuntu/echelon/apps/sensor-ts && /usr/bin/npx tsx src/tools/daily-aggregate.ts >> /home/ubuntu/echelon-daily-agg.log 2>&1
